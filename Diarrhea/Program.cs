@@ -1,13 +1,14 @@
-﻿using CommandLine;
-using System.Reflection;
-
-namespace Diarrhea
+﻿namespace Diarrhea
 {
-    internal partial class Program
-    {
-        static void Main(string[] args)
-        {
+    using CommandLine;
 
+    /// <summary>
+    /// Reads and executes commands from the CLI.
+    /// </summary>
+    internal class Program
+    {
+        private static void Main(string[] args)
+        {
             {
                 Parser.Default.ParseArguments<Options.ExtractOptions, Options.ListOptions, Options.PackOptions>(args)
                               .WithParsed<Options.ExtractOptions>(options => RunExtract(options))
@@ -16,10 +17,10 @@ namespace Diarrhea
                               .WithNotParsed(errors => HandleParseError(errors));
             }
 
-
             static void RunExtract(Options.ExtractOptions opts)
             {
-                Console.WriteLine(opts.NumFilesReserved);
+                ContainerParser parser = new ContainerParser(opts.InputFile, opts.NumFilesReserved);
+                parser.Call();
             }
 
             static void RunListFiles(Options.ListOptions opts)
@@ -32,7 +33,7 @@ namespace Diarrhea
 
             static void HandleParseError(IEnumerable<Error> errs)
             {
-                //handle errors
+                // handle parsing errors
             }
         }
     }
