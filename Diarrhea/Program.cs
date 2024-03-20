@@ -1,5 +1,6 @@
 ﻿namespace Diarrhea
 {
+    using System;
     using CommandLine;
 
     /// <summary>
@@ -10,21 +11,23 @@
         private static void Main(string[] args)
         {
             {
-                Parser.Default.ParseArguments<Options.ExtractOptions, Options.ListOptions, Options.PackOptions>(args)
-                              .WithParsed<Options.ExtractOptions>(options => RunExtract(options))
+                Parser.Default.ParseArguments<Options.ExtractAllOptions, Options.ListOptions, Options.PackOptions>(args)
+                              .WithParsed<Options.ExtractAllOptions>(options => RunExtractAll(options))
                               .WithParsed<Options.ListOptions>(options => RunListFiles(options))
                               .WithParsed<Options.PackOptions>(options => RunPackDir(options))
                               .WithNotParsed(errors => HandleParseError(errors));
             }
 
-            static void RunExtract(Options.ExtractOptions opts)
+            static void RunExtractAll(Options.ExtractAllOptions opts)
             {
-                ContainerParser parser = new ContainerParser(opts.InputFile, opts.NumFilesReserved);
-                parser.Call();
+                ContainerParser parser = new (opts.InputFile, opts.NumFilesReserved);
+                Extracter.ExtractAll(parser, opts.OutputDir, opts.Suffix);
             }
 
             static void RunListFiles(Options.ListOptions opts)
             {
+                ContainerParser parser = new (opts.InputFile, opts.NumFilesReserved);
+                Informer.ListFiles(parser);
             }
 
             static void RunPackDir(Options.PackOptions opts)
