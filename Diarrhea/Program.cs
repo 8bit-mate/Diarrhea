@@ -23,7 +23,8 @@
 
             static void HandleInput(string[] args)
             {
-                Parser.Default.ParseArguments<Options.ExtractAllOptions, Options.ListOptions, Options.PackOptions>(args)
+                Parser.Default.ParseArguments<Options.ExtractOptions, Options.ExtractAllOptions, Options.ListOptions, Options.PackOptions>(args)
+                              .WithParsed<Options.ExtractOptions>(options => RunExtract(options))
                               .WithParsed<Options.ExtractAllOptions>(options => RunExtractAll(options))
                               .WithParsed<Options.ListOptions>(options => RunListFiles(options))
                               .WithParsed<Options.PackOptions>(options => RunPackDir(options))
@@ -34,6 +35,12 @@
             {
                 ContainerParser parser = new (opts.InputFile, opts.NumFilesReserved);
                 Extracter.ExtractAll(parser, opts.OutputDir, opts.Suffix);
+            }
+
+            static void RunExtract(Options.ExtractOptions opts)
+            {
+                ContainerParser parser = new (opts.InputFile, opts.NumFilesReserved);
+                Extracter.ExtractList(parser, opts.Filenames.ToList(), opts.OutputDir, opts.Suffix);
             }
 
             static void RunListFiles(Options.ListOptions opts)

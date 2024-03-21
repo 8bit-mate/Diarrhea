@@ -1,6 +1,4 @@
-﻿using CommandLine;
-
-namespace Diarrhea
+﻿namespace Diarrhea
 {
     /// <summary>
     /// Provides methods to extract data from a container.
@@ -8,15 +6,29 @@ namespace Diarrhea
     public class Extracter
     {
         /// <summary>
-        /// Extracts all files from a container to single files.
+        /// Extracts all files from a container.
         /// </summary>
         /// <param name="parser">Parser instance.</param>
         /// <param name="dir">Output directory.</param>
-        /// <param name="suffix">String to add at the end of file names.</param>
+        /// <param name="suffix">String to add at the end of the extracted file names.</param>
         public static void ExtractAll(ContainerParser parser, string dir, string suffix)
         {
             var dataTable = parser.Parse();
             ExtractData(dataTable, parser.FileName, dir, suffix);
+        }
+
+        /// <summary>
+        /// Extracts list of files (spec. by the names) from a container.
+        /// </summary>
+        /// <param name="parser">Parser instance.</param>
+        /// <param name="fileNames">Files to extract.</param>
+        /// <param name="dir">Output directory.</param>
+        /// <param name="suffix">String to add at the end of the extracted file names.</param>
+        public static void ExtractList(ContainerParser parser, List<string> fileNames, string dir, string suffix)
+        {
+            var dataTable = parser.Parse();
+            IEnumerable<FileEntry> selectedFiles = dataTable.Where(e => fileNames.Contains(e.Name));
+            ExtractData(selectedFiles.ToArray(), parser.FileName, dir, suffix);
         }
 
         private static void ExtractData(FileEntry[] dataTable, string inputPath, string dir, string suffix)

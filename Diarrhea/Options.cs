@@ -31,6 +31,24 @@
             public string InputFile { get; set; }
         }
 
+        [Verb("extract", HelpText = "Extract individual files")]
+        public class ExtractOptions : ContainerReadOptions
+        {
+            [Option('f', "f-list", Required = true, HelpText = "Files to extract")]
+            public IEnumerable<string> Filenames { get; set; }
+
+            [Option('o', "output", Required = true, HelpText = "Output directory")]
+            public string OutputDir { get; set; }
+
+            [Option(
+                's',
+                "suffix",
+                Required = false,
+                Default = "",
+                HelpText = "Adds a suffix to each filename.")]
+            public string Suffix { get; set; }
+        }
+
         [Verb("extract-all", HelpText = "Extract all files.")]
         public class ExtractAllOptions : ContainerReadOptions
         {
