@@ -15,9 +15,9 @@
 
             Console.WriteLine($"{"Filename",-16}{"Offset (base10)",-16}{"Size (base10)",-16}");
 
-            foreach (var (fileName, offset, size) in dataTable)
+            foreach (var e in dataTable)
             {
-                Console.WriteLine($"{fileName,-16}{offset,-16}{size,-16}");
+                Console.WriteLine($"{e.Name,-16}{e.Offset,-16}{e.Size,-16}");
             }
         }
     }

@@ -29,7 +29,11 @@ namespace Diarrhea
             }
         }
 
-        public (string fileName, int offset, int size)[] Parse()
+        /// <summary>
+        /// Parse binary container to get file names, offsets and sizes.
+        /// </summary>
+        /// <returns>Array of objects with properties required to extract data.</returns>
+        public FileEntry[] Parse()
         {
             int numFilesPacked = this.ReadInt32();
             string[] fileNames = this.ReadStrings(numFilesPacked);
@@ -40,9 +44,11 @@ namespace Diarrhea
 
             this.fileStream.Close();
 
-            (string fileName, int offset, int size)[] zip = fileNames.Zip(offsets, sizes).ToArray();
-
-            return zip;
+            return fileNames.Zip(offsets, sizes).Select(tuple => new FileEntry(
+                    tuple.First,
+                    tuple.Second,
+                    tuple.Third))
+                .ToArray();
         }
 
         private void RelJump(int nBytes)

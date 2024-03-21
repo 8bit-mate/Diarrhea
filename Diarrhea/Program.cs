@@ -10,9 +10,10 @@
         private static void Main(string[] args)
         {
             {
+                HandleInput(args);
                 try
                 {
-                    HandleInput(args);
+                    //HandleInput(args);
                 }
                 catch (Exception ex)
                 {

@@ -46,10 +46,9 @@
                 throw new ArgumentException("The number of input files exceeds the number of files reserved.");
             }
 
-            var writeStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write);
-
             var header = CreateHeader(CreateFilesTable(files, numFilesReserved), numFilesReserved, numFiles);
 
+            var writeStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write);
             writeStream.Write(header, 0, header.Length);
 
             foreach (var file in files)
@@ -61,18 +60,18 @@
             writeStream.Close();
         }
 
-        private static byte[] CreateHeader((string fileName, int offset, int size)[] filesTable, int numFilesReserved, int numFiles)
+        private static byte[] CreateHeader(FileEntry[] filesTable, int numFilesReserved, int numFiles)
         {
             var arr = new byte[CalcDataOffset(numFilesReserved)];
             BinaryPrimitives.TryWriteInt32LittleEndian(arr, numFiles);
 
             for (int i = 0; i < filesTable.Length; i++)
             {
-                byte[] fileNamesBytes = Encoding.ASCII.GetBytes(filesTable[i].fileName);
+                byte[] fileNamesBytes = Encoding.ASCII.GetBytes(filesTable[i].Name);
                 byte[] offsetBytes = new byte[IntSize];
-                BinaryPrimitives.TryWriteInt32LittleEndian(offsetBytes, filesTable[i].offset);
+                BinaryPrimitives.TryWriteInt32LittleEndian(offsetBytes, filesTable[i].Offset);
                 byte[] sizeBytes = new byte[IntSize];
-                BinaryPrimitives.TryWriteInt32LittleEndian(sizeBytes, filesTable[i].size);
+                BinaryPrimitives.TryWriteInt32LittleEndian(sizeBytes, filesTable[i].Size);
 
                 CopyBytes(fileNamesBytes, arr, IntSize, i, StrSize);
                 CopyBytes(offsetBytes, arr, IntSize + (StrSize * numFilesReserved), i, IntSize);
@@ -90,21 +89,23 @@
             }
         }
 
-        private static (string fileName, int offset, int size)[] CreateFilesTable(FileInfo[] files, int numFilesReserved)
+        private static FileEntry[] CreateFilesTable(FileInfo[] files, int numFilesReserved)
         {
-            var res = new (string fileName, int offset, int size)[files.Length];
+            var arr = new FileEntry[files.Length];
 
             int offset = CalcDataOffset(numFilesReserved);
 
             for (int i = 0; i < files.Length; i++)
             {
-                res[i].fileName = files[i].Name;
-                res[i].size = (int)files[i].Length; // todo: throw ex. if length exceeds int32.
-                res[i].offset = offset;
+                var name = files[i].Name;
+                var size = (int)files[i].Length; // todo: throw ex. if length exceeds int32.
+
+                arr[i] = new FileEntry(name, offset, size);
+
                 offset += (int)files[i].Length;
             }
 
-            return res;
+            return arr;
         }
 
         private static int CalcDataOffset(int numFilesReserved)
