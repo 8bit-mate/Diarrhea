@@ -63,7 +63,7 @@
 
         private static byte[] CreateHeader((string fileName, int offset, int size)[] filesTable, int numFilesReserved, int numFiles)
         {
-            var arr = new byte[CalcDataOffset(numFilesReserved) + IntSize];
+            var arr = new byte[CalcDataOffset(numFilesReserved)];
             BinaryPrimitives.TryWriteInt32LittleEndian(arr, numFiles);
 
             for (int i = 0; i < filesTable.Length; i++)
@@ -110,7 +110,7 @@
         private static int CalcDataOffset(int numFilesReserved)
         {
             // 2 since we have two int32 arrays of the same length (offsets and then sizes).
-            return (StrSize * numFilesReserved) + (2 * IntSize * numFilesReserved);
+            return IntSize + (StrSize * numFilesReserved) + (2 * IntSize * numFilesReserved);
         }
     }
 }
