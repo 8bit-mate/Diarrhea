@@ -3,7 +3,7 @@
     /// <summary>
     /// Provides methods to extract data from a container.
     /// </summary>
-    public class Extracter
+    public static class Extracter
     {
         /// <summary>
         /// Extracts all files from a container.

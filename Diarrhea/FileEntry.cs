@@ -12,16 +12,25 @@
         private readonly int offset = offset;
         private readonly int size = size;
 
+        /// <summary>
+        /// Gets file name.
+        /// </summary>
         public string Name
         {
             get { return this.name; }
         }
 
+        /// <summary>
+        /// Gets file offset in the container.
+        /// </summary>
         public int Offset
         {
             get { return this.offset; }
         }
 
+        /// <summary>
+        /// Gets file size.
+        /// </summary>
         public int Size
         {
             get { return this.size; }

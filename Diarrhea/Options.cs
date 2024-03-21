@@ -5,7 +5,7 @@
     /// <summary>
     /// Defines app's commands and their options.
     /// </summary>
-    public class Options
+    public static class Options
     {
         private const int DefNumFilesReserved = 1024;
 
@@ -65,12 +65,12 @@
 
         }
 
-        [Verb("list", HelpText = "List files on a .dat container.")]
+        [Verb("list", HelpText = "List files on a *.dat container.")]
         public class ListOptions : ContainerReadOptions
         {
         }
 
-        [Verb("packdir", HelpText = "Pack a directory with files into a .dat container.")]
+        [Verb("packdir", HelpText = "Pack a directory with files into a *.dat container.")]
         public class PackOptions : ContainerOperationOptions
         {
             [Option('i', "input", Required = true, HelpText = "Directory with files to pack.")]
@@ -84,7 +84,7 @@
                 "mask",
                 Required = false,
                 Default = "*.*",
-                HelpText = "Mask to select files from the dir. Default: \"*.*\".")]
+                HelpText = "Mask to select files from the dir.")]
             public string Mask { get; set; }
         }
     }

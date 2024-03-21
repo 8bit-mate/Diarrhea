@@ -3,8 +3,10 @@
     /// <summary>
     /// Provide methods to inform user about container's data.
     /// </summary>
-    public class Informer
+    public static class Informer
     {
+        private const int StrLen = 16;
+
         /// <summary>
         /// Prints list of files packed in a container.
         /// </summary>
@@ -13,11 +15,11 @@
         {
             var dataTable = parser.Parse();
 
-            Console.WriteLine($"{"Filename",-16}{"Offset (base10)",-16}{"Size (base10)",-16}");
+            Console.WriteLine($"{"Filename",-StrLen}{"Offset (base10)",-StrLen}{"Size (base10)",-StrLen}");
 
             foreach (var e in dataTable)
             {
-                Console.WriteLine($"{e.Name,-16}{e.Offset,-16}{e.Size,-16}");
+                Console.WriteLine($"{e.Name,-StrLen}{e.Offset,-StrLen}{e.Size,-StrLen}");
             }
         }
     }

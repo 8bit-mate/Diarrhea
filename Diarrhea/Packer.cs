@@ -7,7 +7,7 @@
     /// <summary>
     /// Provides methods to pack files into a *.dat container.
     /// </summary>
-    public class Packer
+    public static class Packer
     {
         /// <summary>
         /// Packs a directory with files into a .dat container.
@@ -97,20 +97,25 @@
 
             for (int i = 0; i < files.Length; i++)
             {
-                var name = files[i].Name;
-                var size = (int)files[i].Length; // todo: throw ex. if length exceeds int32.
+                var name = TruncateLongString(files[i].Name, StrSize);
+                var size = (int)files[i].Length; // todo: throw ex. if the value exceeds int32.
 
                 arr[i] = new FileEntry(name, offset, size);
 
-                offset += (int)files[i].Length;
+                offset += (int)files[i].Length;  // todo: throw ex. if the value exceeds int32.
             }
 
             return arr;
         }
 
+        private static string? TruncateLongString(this string str, int maxLength)
+        {
+            return str?[0..Math.Min(str.Length, maxLength)];
+        }
+
         private static int CalcDataOffset(int numFilesReserved)
         {
-            // 2 since we have two int32 arrays of the same length (offsets and then sizes).
+            // 2 since we have two int32 arrays of the same length (offsets and sizes).
             return IntSize + (StrSize * numFilesReserved) + (2 * IntSize * numFilesReserved);
         }
     }

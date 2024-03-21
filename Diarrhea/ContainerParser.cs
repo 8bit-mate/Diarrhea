@@ -10,7 +10,7 @@ namespace Diarrhea
     /// <remarks>
     /// Initializes a new instance of the <see cref="ContainerParser"/> class.
     /// </remarks>
-    /// <param name="fileName">Path to the *.dat container</param>
+    /// <param name="fileName">Path to the *.dat container.</param>
     /// <param name="numFilesReserved">Number of files reserved in the container</param>
     public partial class ContainerParser(string fileName, int numFilesReserved)
     {
@@ -45,10 +45,10 @@ namespace Diarrhea
             this.fileStream.Close();
 
             return fileNames.Zip(offsets, sizes).Select(tuple => new FileEntry(
-                    tuple.First,
-                    tuple.Second,
-                    tuple.Third))
-                .ToArray();
+                        tuple.First,
+                        tuple.Second,
+                        tuple.Third))
+                    .ToArray();
         }
 
         private void RelJump(int nBytes)
