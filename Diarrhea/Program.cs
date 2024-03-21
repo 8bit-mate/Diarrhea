@@ -1,15 +1,26 @@
 ﻿namespace Diarrhea
 {
-    using System;
     using CommandLine;
 
     /// <summary>
-    /// Reads and executes commands from the CLI.
+    /// Entry point. Reads and executes commands from the CLI.
     /// </summary>
     internal class Program
     {
         private static void Main(string[] args)
         {
+            {
+                try
+                {
+                    HandleInput(args);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+
+            static void HandleInput(string[] args)
             {
                 Parser.Default.ParseArguments<Options.ExtractAllOptions, Options.ListOptions, Options.PackOptions>(args)
                               .WithParsed<Options.ExtractAllOptions>(options => RunExtractAll(options))
@@ -32,6 +43,7 @@
 
             static void RunPackDir(Options.PackOptions opts)
             {
+                Packer.PackDir(opts.InputDir, opts.OutputFile, opts.Mask, opts.NumFilesReserved);
             }
 
             static void HandleParseError(IEnumerable<Error> errs)

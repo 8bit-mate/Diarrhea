@@ -2,6 +2,7 @@ namespace Diarrhea
 {
     using System.Text;
     using System.Text.RegularExpressions;
+    using static Globals;
 
     /// <summary>
     /// Provides methods to parse a binary container.
@@ -13,8 +14,6 @@ namespace Diarrhea
     /// <param name="numFilesReserved">Number of files reserved in the container</param>
     public partial class ContainerParser(string fileName, int numFilesReserved)
     {
-        private const int FileNameLength = 32;
-
         private readonly string fileName = fileName;
         private readonly int numFilesReserved = numFilesReserved;
         private readonly FileStream fileStream = new FileStream(fileName, FileMode.Open, FileAccess.Read);
@@ -34,9 +33,9 @@ namespace Diarrhea
         {
             int numFilesPacked = this.ReadInt32();
             string[] fileNames = this.ReadStrings(numFilesPacked);
-            this.RelJump((this.numFilesReserved - numFilesPacked) * FileNameLength);
+            this.RelJump((this.numFilesReserved - numFilesPacked) * StrSize);
             int[] offsets = this.ReadIntArray(numFilesPacked);
-            this.RelJump((this.numFilesReserved - numFilesPacked) * 4);
+            this.RelJump((this.numFilesReserved - numFilesPacked) * IntSize);
             int[] sizes = this.ReadIntArray(numFilesPacked);
 
             this.fileStream.Close();
@@ -53,7 +52,7 @@ namespace Diarrhea
 
         private int ReadInt32()
         {
-            return BitConverter.ToInt32(this.ReadBytes(4));
+            return BitConverter.ToInt32(this.ReadBytes(IntSize));
         }
 
         private byte[] ReadBytes(int length)
@@ -71,7 +70,7 @@ namespace Diarrhea
 
             for (int i = 0; i < numFilesPacked; i++)
             {
-                filenames[i] = this.ReadString(FileNameLength);
+                filenames[i] = this.ReadString(StrSize);
             }
 
             return filenames;
