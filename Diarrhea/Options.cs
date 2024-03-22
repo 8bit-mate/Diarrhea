@@ -10,7 +10,7 @@
         private const int DefNumFilesReserved = 1024;
 
         /// <summary>
-        /// Base class for the options related to a pack/extract operation on a container.
+        /// Base class for the options related to any pack/extract command.
         /// </summary>
         public class ContainerOperationOptions
         {
@@ -23,20 +23,10 @@
         }
 
         /// <summary>
-        /// Base class for the options related to a read operation with a container.
+        /// Base class for the options related to any extraction command.
         /// </summary>
-        public class ContainerReadOptions : ContainerOperationOptions
+        public class ExtractBaseOptions : ContainerReadOptions
         {
-            [Option('i', "input", Required = true, HelpText = "Input *.dat file to be processed.")]
-            public string InputFile { get; set; }
-        }
-
-        [Verb("extract", HelpText = "Extract individual files")]
-        public class ExtractOptions : ContainerReadOptions
-        {
-            [Option('f', "f-list", Required = true, HelpText = "Files to extract")]
-            public IEnumerable<string> Filenames { get; set; }
-
             [Option('o', "output", Required = true, HelpText = "Output directory")]
             public string OutputDir { get; set; }
 
@@ -57,28 +47,25 @@
             public string Suffix { get; set; }
         }
 
-        [Verb("extract-all", HelpText = "Extract all files.")]
-        public class ExtractAllOptions : ContainerReadOptions
+        /// <summary>
+        /// Base class for the options related to a read operation with a container.
+        /// </summary>
+        public class ContainerReadOptions : ContainerOperationOptions
         {
-            [Option('o', "output", Required = true, HelpText = "Output directory.")]
-            public string OutputDir { get; set; }
+            [Option('i', "input", Required = true, HelpText = "Input *.dat file to be processed.")]
+            public string InputFile { get; set; }
+        }
 
-            [Option(
-                'p',
-                "prefix",
-                Required = false,
-                Default = "",
-                HelpText = "Adds a prefix to each file name.")]
-            public string Prefix { get; set; }
+        [Verb("extract", HelpText = "Extract individual files")]
+        public class ExtractOptions : ExtractBaseOptions
+        {
+            [Option('f', "f-list", Required = true, HelpText = "Files to extract")]
+            public IEnumerable<string> Filenames { get; set; }
+        }
 
-            [Option(
-                's',
-                "suffix",
-                Required = false,
-                Default = "",
-                HelpText = "Adds a suffix to each filename.")]
-            public string Suffix { get; set; }
-
+        [Verb("extract-all", HelpText = "Extract all files.")]
+        public class ExtractAllOptions : ExtractBaseOptions
+        {
         }
 
         [Verb("list", HelpText = "List files on a *.dat container.")]
