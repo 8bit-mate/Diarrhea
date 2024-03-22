@@ -10,10 +10,9 @@
         private static void Main(string[] args)
         {
             {
-                HandleInput(args);
                 try
                 {
-                    //HandleInput(args);
+                    HandleInput(args);
                 }
                 catch (Exception ex)
                 {
@@ -24,7 +23,7 @@
             static void HandleInput(string[] args)
             {
                 Parser.Default.ParseArguments<Options.ExtractOptions, Options.ExtractAllOptions, Options.ListOptions, Options.PackOptions>(args)
-                              .WithParsed<Options.ExtractOptions>(options => RunExtract(options))
+                              .WithParsed<Options.ExtractOptions>(options => RunExtractList(options))
                               .WithParsed<Options.ExtractAllOptions>(options => RunExtractAll(options))
                               .WithParsed<Options.ListOptions>(options => RunListFiles(options))
                               .WithParsed<Options.PackOptions>(options => RunPackDir(options))
@@ -34,13 +33,15 @@
             static void RunExtractAll(Options.ExtractAllOptions opts)
             {
                 ContainerParser parser = new (opts.InputFile, opts.NumFilesReserved);
-                Extracter.ExtractAll(parser, opts.OutputDir, opts.Suffix);
+                string[] nameWrapper = [opts.Prefix, opts.Suffix];
+                Extracter.ExtractAll(parser, opts.OutputDir, nameWrapper);
             }
 
-            static void RunExtract(Options.ExtractOptions opts)
+            static void RunExtractList(Options.ExtractOptions opts)
             {
                 ContainerParser parser = new (opts.InputFile, opts.NumFilesReserved);
-                Extracter.ExtractList(parser, opts.Filenames.ToList(), opts.OutputDir, opts.Suffix);
+                string[] nameWrapper = [opts.Prefix, opts.Suffix];
+                Extracter.ExtractList(parser, opts.Filenames.ToList(), opts.OutputDir, nameWrapper);
             }
 
             static void RunListFiles(Options.ListOptions opts)
@@ -51,7 +52,9 @@
 
             static void RunPackDir(Options.PackOptions opts)
             {
-                Packer.PackDir(opts.InputDir, opts.OutputFile, opts.Mask, opts.NumFilesReserved);
+                Packer packer = new Packer(opts.NumFilesReserved, opts.RegExFiler);
+
+                packer.PackDir(opts.InputDir, opts.OutputFile, opts.Mask);
             }
 
             static void HandleParseError(IEnumerable<Error> errs)

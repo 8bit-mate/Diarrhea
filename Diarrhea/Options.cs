@@ -41,11 +41,19 @@
             public string OutputDir { get; set; }
 
             [Option(
+                'p',
+                "prefix",
+                Required = false,
+                Default = "",
+                HelpText = "Adds a prefix to each file name.")]
+            public string Prefix { get; set; }
+
+            [Option(
                 's',
                 "suffix",
                 Required = false,
                 Default = "",
-                HelpText = "Adds a suffix to each filename.")]
+                HelpText = "Adds a suffix to each file name.")]
             public string Suffix { get; set; }
         }
 
@@ -54,6 +62,14 @@
         {
             [Option('o', "output", Required = true, HelpText = "Output directory.")]
             public string OutputDir { get; set; }
+
+            [Option(
+                'p',
+                "prefix",
+                Required = false,
+                Default = "",
+                HelpText = "Adds a prefix to each file name.")]
+            public string Prefix { get; set; }
 
             [Option(
                 's',
@@ -84,8 +100,16 @@
                 "mask",
                 Required = false,
                 Default = "*.*",
-                HelpText = "Mask to select files from the dir.")]
+                HelpText = "Mask to select files from the directory.")]
             public string Mask { get; set; }
+
+            [Option(
+                'r',
+                "regex",
+                Required = false,
+                Default = "",
+                HelpText = "RegEx filter to remove prefixes/suffixes from the input file names.")]
+            public string RegExFiler { get; set; }
         }
     }
 }

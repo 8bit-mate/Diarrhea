@@ -1,1 +1,1 @@
-# DiarrheaApp
+# Diarrhea

@@ -36,7 +36,7 @@ namespace Diarrhea
         public FileEntry[] Parse()
         {
             int numFilesPacked = this.ReadInt32();
-            string[] fileNames = this.ReadStrings(numFilesPacked);
+            string[] fileNames = this.ReadFileNames(numFilesPacked);
             this.RelJump((this.numFilesReserved - numFilesPacked) * StrSize);
             int[] offsets = this.ReadIntArray(numFilesPacked);
             this.RelJump((this.numFilesReserved - numFilesPacked) * IntSize);
@@ -70,7 +70,7 @@ namespace Diarrhea
             return buffer;
         }
 
-        private string[] ReadStrings(int numFilesPacked)
+        private string[] ReadFileNames(int numFilesPacked)
         {
             string[] filenames = new string[numFilesPacked];
 
