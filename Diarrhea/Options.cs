@@ -71,6 +71,13 @@
         [Verb("list", HelpText = "List files on a *.dat container.")]
         public class ListOptions : ContainerReadOptions
         {
+            [Option(
+                'r',
+                "rows",
+                Required = false,
+                Default = new[] { "filename", "offset", "size" },
+                HelpText = "Rows to print out. The default value prints out all rows.")]
+            public IEnumerable<string> Rows { get; set; }
         }
 
         [Verb("packdir", HelpText = "Pack a directory with files into a *.dat container.")]

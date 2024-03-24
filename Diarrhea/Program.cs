@@ -47,12 +47,12 @@
             static void RunListFiles(Options.ListOptions opts)
             {
                 ContainerParser parser = new (opts.InputFile, opts.NumFilesReserved);
-                Informer.ListFiles(parser);
+                Informer.ListFiles(parser,opts.Rows.ToArray());
             }
 
             static void RunPackDir(Options.PackOptions opts)
             {
-                Packer packer = new Packer(opts.NumFilesReserved, opts.RegExFiler);
+                Packer packer = new (opts.NumFilesReserved, opts.RegExFiler);
 
                 packer.PackDir(opts.InputDir, opts.OutputFile, opts.Mask);
             }
