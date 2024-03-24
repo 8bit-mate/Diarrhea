@@ -47,7 +47,7 @@
             static void RunListFiles(Options.ListOptions opts)
             {
                 ContainerParser parser = new (opts.InputFile, opts.NumFilesReserved);
-                Informer.ListFiles(parser,opts.Rows.ToArray());
+                Informer.ListFiles(parser, opts.Rows.ToArray());
             }
 
             static void RunPackDir(Options.PackOptions opts)

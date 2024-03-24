@@ -1,6 +1,4 @@
-﻿using System.Collections.ObjectModel;
-
-namespace Diarrhea
+﻿namespace Diarrhea
 {
     /// <summary>
     /// Provide methods to inform user about container's data.
@@ -14,7 +12,8 @@ namespace Diarrhea
         /// Prints the list of files packed in a container.
         /// </summary>
         /// <param name="parser">Parser instance.</param>
-        public static void ListFiles(ContainerParser parser, string[] keys)
+        /// <param name="rows">Rows to print out.</param>
+        public static void ListFiles(ContainerParser parser, string[] rows)
         {
             var dataTable = parser.Parse();
 
@@ -25,7 +24,7 @@ namespace Diarrhea
                         { "size", "Size(base10)".PadRight(IntLen) },
                     };
 
-            PrintLine(attributeNames, keys);
+            PrintLine(attributeNames, rows);
 
             foreach (var e in dataTable)
             {
@@ -36,13 +35,13 @@ namespace Diarrhea
                         { "size", e.Size.ToString().PadRight(IntLen) },
                     };
 
-                PrintLine(attributes, keys);
+                PrintLine(attributes, rows);
             }
         }
 
-        private static void PrintLine(Dictionary<string, string> items, string[] keys)
+        private static void PrintLine(Dictionary<string, string> items, string[] rows)
         {
-            foreach (var key in keys)
+            foreach (var key in rows)
             {
                 string itemToPrint;
 

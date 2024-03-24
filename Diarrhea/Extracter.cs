@@ -1,6 +1,4 @@
-﻿using System.IO;
-
-namespace Diarrhea
+﻿namespace Diarrhea
 {
     /// <summary>
     /// Provides methods to extract data from a container.
