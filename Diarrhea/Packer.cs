@@ -86,9 +86,9 @@
             }
         }
 
-        private static string TruncateLongString(string str, int maxLength)
+        private static string FitStringToLength(string str, int maxLength)
         {
-            return str[0..Math.Min(str.Length, maxLength)];
+            return str[0..Math.Min(str.Length, maxLength)].PadRight(maxLength, '\0');
         }
 
         // Calculate initial data offset.
@@ -145,7 +145,9 @@
 
         private string FilterFileName(string name)
         {
-            return Regex.Replace(TruncateLongString(name, StrSize), this.regExFilter, string.Empty);
+            return FitStringToLength(
+                Regex.Match(name, this.regExFilter).ToString(),
+                StrSize);
         }
     }
 }

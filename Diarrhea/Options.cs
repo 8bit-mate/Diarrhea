@@ -101,7 +101,7 @@
                 'r',
                 "regex",
                 Required = false,
-                Default = "",
+                Default = "(.*)",
                 HelpText = "RegEx filter to remove prefixes/suffixes from the input file names.")]
             public string RegExFiler { get; set; }
         }
